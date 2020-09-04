@@ -155,7 +155,7 @@ class AenBot(commands.Bot):
             streams = await self.get_broadcasts(twitch_game)
             if not streams:
                 print("The JSON returned blank. Skipping this request.")
-                return
+                continue
             sorted_streams = sorted(streams, key=lambda stream: self.parse_date(stream["created_at"], self.iso8601))
             for stream in sorted_streams:
                 formatted_twitch_time = self.parse_date(stream["created_at"], self.iso8601)
