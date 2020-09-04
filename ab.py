@@ -1,10 +1,11 @@
-import os
 
 import discord
 from discord.ext import tasks, commands
 from dotenv import load_dotenv
 from datetime import datetime, timezone
+import json
 import math
+import os
 from pathlib import Path
 import requests
 
@@ -60,8 +61,12 @@ class AenBot(commands.Bot):
     async def get_broadcasts(self, twitch_game):
         twitch_headers = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": self.TWITCH_ID}
         twitch_request = requests.get(f"https://api.twitch.tv/kraken/streams/?game={twitch_game}", headers=twitch_headers)
-        twitch_json = twitch_request.json()
-        return twitch_json["streams"]
+        twitch_json = {}
+        try:
+            twitch_json = twitch_request.json()
+            return twitch_json["streams"]
+        except json.JSONDecodeError:
+            return False
 
     def parse_date(self, date_string, parser):
         return datetime.strptime(date_string, parser)
@@ -149,13 +154,17 @@ class AenBot(commands.Bot):
         no_streams = True
         for twitch_game in self.twitch_games:
             streams = await self.get_broadcasts(twitch_game)
+            if not streams:
+                print("The JSON returned blank. Skipping this request.")
+                return
             sorted_streams = sorted(streams, key=lambda stream: self.parse_date(stream["created_at"], self.iso8601))
             for stream in sorted_streams:
                 formatted_twitch_time = self.parse_date(stream["created_at"], self.iso8601)
                 if formatted_twitch_time > last_loop_time:
                     chan = stream["channel"]
                     if (chan["display_name"].lower() == "aenimuskol") and (chan["game"].lower() == "kingdom of loathing"):
-                        await channel.send(f'`@listeners {chan["display_name"]}` is LIVE right now at {chan["url"]} !')
+                        announcements = self.get_channel(466605739838930959)
+                        await announcements.send(f'`{chan["display_name"]}` is broadcasting Kingdom of Loathing-related things LIVE right now at {chan["url"]} !')
                     else:
                         await channel.send(f'`{chan["display_name"]}` is broadcasting {chan["game"]} at {chan["url"]} !')
                     print(f"Stream start: {stream['created_at']}; Last check: {last_loop_time}")
