@@ -61,7 +61,6 @@ class AenBot(commands.Bot):
     async def get_broadcasts(self, twitch_game):
         twitch_headers = {"Accept": "application/vnd.twitchtv.v5+json", "Client-ID": self.TWITCH_ID}
         twitch_request = requests.get(f"https://api.twitch.tv/kraken/streams/?game={twitch_game}", headers=twitch_headers)
-        twitch_json = {}
         try:
             twitch_json = twitch_request.json()
             return twitch_json["streams"]
