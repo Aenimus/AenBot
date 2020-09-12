@@ -114,12 +114,22 @@ class AenBot(commands.Bot):
                 print(f"Assigning No Alerts role to {member.name}")
             return
 
+        # LFGames
+        if payload.message_id == 754473416316289105:
+            guild = self.get_guild(payload.guild_id)
+            member = payload.member
+            LFGames = discord.utils.get(guild.roles, id=754473984661258391)
+            if payload.emoji.name == "✅":
+                await member.add_roles(LFGames)
+                print(f"Assigning LFGames role to {member.name}")
+            return
+
     async def on_raw_reaction_remove(self, payload):
         if payload.user_id == self.user.id:
             return
 
         # No Alerts
-        if payload.message_id != 741480863543591014:
+        if payload.message_id == 741480863543591014:
             guild = self.get_guild(payload.guild_id)
             member = guild.get_member(payload.user_id)
             they = discord.utils.get(guild.roles, id=741479573337800706)
@@ -127,13 +137,23 @@ class AenBot(commands.Bot):
             he = discord.utils.get(guild.roles, id=741479366319538226)
             if payload.emoji.name == "🇹":
                 await member.remove_roles(they)
-                print(f"Removing they from {member.name}")
+                print(f"Removing they/them role from {member.name}")
             if payload.emoji.name == "♀️":
                 await member.remove_roles(she)
-                print(f"Removing she from {member.name}")
+                print(f"Removing she/her role from {member.name}")
             if payload.emoji.name == "♂️":
                 await member.remove_roles(he)
-                print(f"Removing he from {member.name}")
+                print(f"Removing he/him role from {member.name}")
+            return
+        
+        # LFGames
+        if payload.message_id == 754473416316289105:
+            guild = self.get_guild(payload.guild_id)
+            member = guild.get_member(payload.user_id)
+            LFGames = discord.utils.get(guild.roles, id=754473984661258391)
+            if payload.emoji.name == "✅":
+                await member.remove_roles(LFGames)
+                print(f"Removing LFGames role from {member.name}")
             return
 
     async def on_member_join(self, member):
