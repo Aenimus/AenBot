@@ -63,7 +63,8 @@ class AenBot(commands.Bot):
         twitch_request = requests.get(f"https://api.twitch.tv/kraken/streams/?game={twitch_game}", headers=twitch_headers)
         try:
             twitch_json = twitch_request.json()
-            return twitch_json["streams"]
+            if "streams" in twitch_json.keys():
+                return twitch_json["streams"]
         except json.JSONDecodeError:
             return False
 
