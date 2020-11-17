@@ -24,7 +24,7 @@ class AenBot(commands.Bot):
         self.ASS_GUILD = int(os.getenv("ASS_GUILD") or 0)
         self.TWITCH_ID = os.getenv("TWITCH_ID")
         self.stream_check = Path("last_stream_check.txt").resolve()
-        self.twitch_games = ["west%20of%20loathing", "The%20Kingdom%20of%20Loathing"]
+        self.twitch_games = ["The%20Kingdom%20of%20Loathing"]
         self.dt_format = "%Y-%m-%d %H:%M:%S.%f%z"
         self.iso8601 = "%Y-%m-%dT%H:%M:%S%z"
 
@@ -128,7 +128,7 @@ class AenBot(commands.Bot):
         if payload.user_id == self.user.id:
             return
 
-        # No Alerts
+        # Pronouns
         if payload.message_id == 741480863543591014:
             guild = self.get_guild(payload.guild_id)
             member = guild.get_member(payload.user_id)
