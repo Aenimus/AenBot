@@ -67,6 +67,7 @@ class AenBot(commands.Bot):
                 return twitch_json["streams"]
         except json.JSONDecodeError:
             return False
+        return False
 
     def parse_date(self, date_string, parser):
         return datetime.strptime(date_string, parser)
