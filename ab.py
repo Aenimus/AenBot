@@ -63,11 +63,9 @@ class AenBot(commands.Bot):
         twitch_request = requests.get(f"https://api.twitch.tv/kraken/streams/?game={twitch_game}", headers=twitch_headers)
         try:
             twitch_json = twitch_request.json()
-            if "streams" in twitch_json.keys():
-                return twitch_json["streams"]
-        except json.JSONDecodeError:
+            return twitch_json["streams"]
+        except (json.JSONDecodeError, KeyError):
             return False
-        return False
 
     def parse_date(self, date_string, parser):
         return datetime.strptime(date_string, parser)
