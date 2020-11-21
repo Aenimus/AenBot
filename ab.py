@@ -160,8 +160,10 @@ class AenBot(commands.Bot):
 
     async def on_member_join(self, member):
         guild = member.guild
+        print(f"{member} has just joined!")
         if guild.id == self.ASS_GUILD:
             Listener = discord.utils.get(guild.roles, id=466622497991688202)
+            print(f"{member} should be assigned!")
             await member.add_roles(Listener)
             return
     
