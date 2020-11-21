@@ -9,6 +9,8 @@ import os
 from pathlib import Path
 import requests
 
+intents = discord.Intents.default()
+intents.members = True
 load_dotenv()
 
 def admin_req():
@@ -19,7 +21,7 @@ def admin_req():
 class AenBot(commands.Bot):
 
     def __init__(self):
-        super().__init__(command_prefix = "!")
+        super().__init__(command_prefix = "!", intents=intents)
         self.TOKEN = os.getenv("DISCORD_TOKEN")
         self.ASS_GUILD = int(os.getenv("ASS_GUILD") or 0)
         self.TWITCH_ID = os.getenv("TWITCH_ID")
@@ -163,7 +165,7 @@ class AenBot(commands.Bot):
             Listener = discord.utils.get(guild.roles, id=466622497991688202)
             print(f"{member} should be assigned!")
             await member.add_roles(Listener)
-            return
+        return
     
     @tasks.loop(seconds=180)
     async def announce_streams(self):
