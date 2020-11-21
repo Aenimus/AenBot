@@ -165,7 +165,7 @@ class AenBot(commands.Bot):
             await member.add_roles(Listener)
             return
     
-    @tasks.loop(seconds=60)
+    @tasks.loop(seconds=180)
     async def announce_streams(self):
         #channel = client.get_channel(740999949084524567) # bot testing
         channel = self.get_channel(578739919040675840) # streams and broadcasting
@@ -183,7 +183,7 @@ class AenBot(commands.Bot):
                 formatted_twitch_time = self.parse_date(stream["created_at"], self.iso8601)
                 if formatted_twitch_time > last_loop_time:
                     chan = stream["channel"]
-                    if (chan["display_name"].lower() == "aenimuskol") and (chan["game"].lower() == "kingdom of loathing"):
+                    if ((chan["display_name"].lower() == "aenimuskol") and (chan["game"].lower() == "kingdom of loathing")) or ((chan["display_name"].lower() == "arsawyer84") and (chan["game"].lower() == "kingdom of loathing")):
                         announcements = self.get_channel(466605739838930959)
                         await announcements.send(f'`{chan["display_name"]}` is broadcasting Kingdom of Loathing-related things LIVE right now at {chan["url"]} !')
                     else:
